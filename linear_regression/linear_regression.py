@@ -4,8 +4,8 @@ import os, sys
 
 def cost(X, y, theta):
     h = np.dot(X, theta)
-    J = np.sum((h - y) * ( h - y))/(2 * len(y))
-    return J if J else 0
+    cos = np.sum((h - y) * ( h - y))/(2 * len(y))
+    return cos
 
 def gradient_descent(X, y, theta, alpha, num_iters):
     m = len(y)
@@ -24,11 +24,11 @@ def linear_regression(X, y, alpha = 0.01,num_iters = 100):
     return predicted, theta, costs
 
 if __name__ == '__main__':
-    # X = np.array(range(25))
-    # y = (X ** 1.3 + np.random.normal(10, 10, X.shape[0]))
-    # X, y = X.reshape((-1, 1)), y.reshape((-1, 1))
-    data = np.loadtxt(os.path.join(sys.path[0], 'linear_regression_data.csv'), delimiter = ',', dtype = np.float64)
-    X, y = data[:, :-1], data[:, -1].reshape((-1, 1))
+    X = np.array(range(25))
+    y = (X ** 1.3 + np.random.normal(10, 10, X.shape[0]))
+    X, y = X.reshape((-1, 1)), y.reshape((-1, 1))
+    # data = np.loadtxt(os.path.join(sys.path[0], 'linear_regression_data.csv'), delimiter = ',', dtype = np.float64)
+    # X, y = data[:, :-1], data[:, -1].reshape((-1, 1))
 
     predicted, theta, costs = linear_regression(X, y)
 
