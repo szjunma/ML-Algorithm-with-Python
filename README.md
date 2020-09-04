@@ -6,17 +6,22 @@ Machine learning algorithm written in Python
 - Usually includes notebook for easy visual
 - Simple examples provided
 
-to run each algorithm, `cd` to corresponding directory and run (replace `***` with the corresponding name):
+to run each algorithm, `cd` to corresponding directory and run the following (replace `***` with the corresponding algorithm) in terminal:
 
 ```
 python ***.py
 ```
 
-### Linear regression
+### 1. Linear regression
+
+#### cost function
+
+#### gradient descent
+
+#### feature normalization
 
 
-
-### Logistic regression
+### 2. Logistic regression
 
 
 
