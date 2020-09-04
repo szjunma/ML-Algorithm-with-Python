@@ -15,7 +15,6 @@ python ***.py
 ### 1. Linear regression
 
 #### cost function
-$$ J(\\theta)=\\frac{1}{2 m} \\sum_{i=1}^{m}\\left(h_{\\theta}\\left(x^{(i)}\\right)-y^{(i)}\\right)^{2} $$
 
 ```
 def cost(X, y, theta):
