@@ -1,5 +1,7 @@
 ## ML Algorithm with Python
 
+### Being constantly updated ...
+
 Machine learning algorithm written in Python
 - Requires basic linear algebra
 - Uses Numpy for matrix operation to avoid costly looping in Python
@@ -11,6 +13,11 @@ to run each algorithm, `cd` to corresponding directory and run the following (re
 ```
 python ***.py
 ```
+
+(I also have plan to package each algorithm into a class)
+
+### credit
+Most equations are from [CS 229](http://cs229.stanford.edu/syllabus-autumn2018.html) class of Stanford.  
 
 ### 1. Linear regression
 
