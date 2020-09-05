@@ -79,7 +79,56 @@ plt.show()
 ```
 
 ### 2. Logistic regression
+#### sigmoid function
+```
+def sigmoid(z):
+    return 1/(1 + np.exp(-z))
+```
 
+#### cost function
+
+```
+def cost(theta, X, y):
+    h = sigmoid(np.dot(X, theta))
+    cos = -(np.sum(y * np.log(h)) + np.sum((1 - y) * np.log(1 - h)))/len(y)
+    return cos
+```
+
+#### expand features
+```
+def expand_feature(x1, x2, power = 2):
+    #expand a 2D feature matrix to polynimial features up to the power
+    new_x = np.ones((x1.shape[0], 1))
+    for i in range(1, power + 1):
+        for j in range(i + 1):
+            new_x = np.append(new_x, (x1**(i-j)*(x2**j)).reshape(-1, 1), axis = 1)
+    return new_x
+```
+
+#### gradient descent
+```
+def gradient_descent(X, y, theta, alpha, num_iters):
+    m = len(y)
+    costs = []
+    for _ in range(num_iters):
+        h = sigmoid(np.dot(X, theta))
+        theta -= alpha * (np.sum((h - y) * X, axis = 0)).reshape(theta.shape[0], 1)/m
+        costs.append(cost(theta, X, y))
+    return theta, costs
+```
+
+#### main function
+```
+def predict(theta, X):
+    return (sigmoid(np.dot(X, theta)) > 0.5).flatten()
+
+def logistic_regression(X, y, power = 2, alpha = 0.01, num_iters = 100):
+    X = expand_feature(X[:, 0], X[:, 1], power = power)
+    theta = np.zeros((X.shape[1], 1), dtype = np.float64)
+    theta, costs = gradient_descent(X, y, theta, alpha, num_iters)
+    predicted = predict(theta, X)
+    return predicted, theta, costs
+```
 
 
 
