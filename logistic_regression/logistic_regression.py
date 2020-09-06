@@ -53,10 +53,10 @@ if __name__ == '__main__':
     plt.savefig(os.path.join(images_dir, 'data.png'))
     plt.clf()
 
-    predicted, theta, costs = logistic_regression(X, y, alpha = 0.03, num_iters = 4000)
+    predicted, theta, costs = logistic_regression(X, y, alpha = 0.15, num_iters = 4000)
     print('The accuracy is {:.2f} %'.format(sum(predicted == y.flatten())/len(y)*100))
 
-    plt.plot(costs, 'b')
+    sns.lineplot(range(4000), costs)
     plt.title('Cost vs Number of Interations')
     plt.ylabel('Cost')
     plt.xlabel('No. of Interations')

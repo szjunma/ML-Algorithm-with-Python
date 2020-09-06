@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 import os, sys
 
 def cost(X, y, theta):
@@ -36,22 +37,22 @@ if __name__ == '__main__':
 
     predicted, theta, costs = linear_regression(X, y)
 
-    plt.plot(X, y, 'rx', 10)
+    sns.scatterplot(X[:, 0], y.flatten())
     plt.title('Dataset')
     plt.ylabel('Y')
     plt.xlabel('X')
     plt.savefig(os.path.join(images_dir, 'data.png'))
     plt.clf()
 
-    plt.plot(costs, 'b')
+    sns.lineplot(range(100), costs)
     plt.title('Cost vs Number of Interations')
     plt.ylabel('Cost')
     plt.xlabel('No. of Interations')
     plt.savefig(os.path.join(images_dir, 'cost.png'))
     plt.clf()
 
-    plt.plot(X, predicted, 'b')
-    plt.plot(X, y, 'rx', 10)
+    sns.lineplot(X[:, 0], predicted.flatten())
+    sns.scatterplot(X[:, 0], y.flatten())
     for i, x in enumerate(X):
         plt.vlines(x, min(predicted[i], y[i]), max(predicted[i], y[i]))
     plt.ylabel('Y')
