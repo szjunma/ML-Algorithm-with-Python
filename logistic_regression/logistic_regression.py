@@ -39,19 +39,29 @@ def logistic_regression(X, y, power = 2, alpha = 0.01, num_iters = 100):
     return predicted, theta, costs
 
 if __name__ == '__main__':
+    images_dir = os.path.join(sys.path[0], 'images')
+    if not os.path.exists(images_dir):
+        os.makedirs(images_dir)
+
     data = np.loadtxt(os.path.join(sys.path[0], 'logistic_regression_data.csv'), delimiter = ',', dtype = np.float64)
     X, y = data[:, :-1], data[:, -1].reshape((-1, 1))
 
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y.flatten())
-    plt.show()
+    plt.title('Dataset')
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.savefig(os.path.join(images_dir, 'data.png'))
+    plt.clf()
 
-    predicted, theta, costs = logistic_regression(X, y)
-    print('The accuracy is {:.2f} %'.format(sum(predicted == y.flatten())/len(y)))
+    predicted, theta, costs = logistic_regression(X, y, alpha = 0.03, num_iters = 4000)
+    print('The accuracy is {:.2f} %'.format(sum(predicted == y.flatten())/len(y)*100))
 
     plt.plot(costs, 'b')
+    plt.title('Cost vs Number of Interations')
     plt.ylabel('Cost')
     plt.xlabel('No. of Interations')
-    plt.show()
+    plt.savefig(os.path.join(images_dir, 'cost.png'))
+    plt.clf()
 
     u = np.linspace(min(X[:, 0]),max(X[:, 0]), 50)
     v = np.linspace(min(X[:, 1]),max(X[:, 1]), 50)
@@ -65,4 +75,8 @@ if __name__ == '__main__':
 
     plt.contour(u,v,z,[0,0.01], cmap = "Reds")
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y.flatten())
-    plt.show()
+    plt.title('Decision Boundary')
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.savefig(os.path.join(images_dir, 'decision_boundary.png'))
+    plt.clf()

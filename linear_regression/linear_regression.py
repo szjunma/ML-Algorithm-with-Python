@@ -24,6 +24,10 @@ def linear_regression(X, y, alpha = 0.01,num_iters = 100):
     return predicted, theta, costs
 
 if __name__ == '__main__':
+    images_dir = os.path.join(sys.path[0], 'images')
+    if not os.path.exists(images_dir):
+        os.makedirs(images_dir)
+
     X = np.array(range(25))
     y = (X ** 1.3 + np.random.normal(10, 10, X.shape[0]))
     X, y = X.reshape((-1, 1)), y.reshape((-1, 1))
@@ -33,14 +37,18 @@ if __name__ == '__main__':
     predicted, theta, costs = linear_regression(X, y)
 
     plt.plot(X, y, 'rx', 10)
+    plt.title('Dataset')
     plt.ylabel('Y')
     plt.xlabel('X')
-    plt.show()
+    plt.savefig(os.path.join(images_dir, 'data.png'))
+    plt.clf()
 
     plt.plot(costs, 'b')
+    plt.title('Cost vs Number of Interations')
     plt.ylabel('Cost')
     plt.xlabel('No. of Interations')
-    plt.show()
+    plt.savefig(os.path.join(images_dir, 'cost.png'))
+    plt.clf()
 
     plt.plot(X, predicted, 'b')
     plt.plot(X, y, 'rx', 10)
@@ -48,5 +56,7 @@ if __name__ == '__main__':
         plt.vlines(x, min(predicted[i], y[i]), max(predicted[i], y[i]))
     plt.ylabel('Y')
     plt.xlabel('X')
+    plt.title('Error')
     plt.legend(('linear fit', 'data'))
-    plt.show()
+    plt.savefig(os.path.join(images_dir, 'Error.png'))
+    plt.clf()
