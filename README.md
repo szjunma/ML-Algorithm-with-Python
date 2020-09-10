@@ -1,6 +1,6 @@
-## ML Algorithm with Python
+# ML Algorithm with Python
 
-### Being constantly updated ...
+## Being constantly updated ...
 
 Machine learning algorithm written in Python
 - Requires basic linear algebra
@@ -16,12 +16,12 @@ python ***.py
 
 (I also have plan to package each algorithm into a class)
 
-### credit
+## credit
 Most equations are from [CS 229](http://cs229.stanford.edu/syllabus-autumn2018.html) class of Stanford.  
 
-### 1. Linear regression
+## 1. Linear regression
 
-#### cost function
+### Cost function
 
 ```
 def cost(X, y, theta):
@@ -30,7 +30,7 @@ def cost(X, y, theta):
     return cos
 ```
 
-#### gradient descent
+### Gradient descent
 ```
 def gradient_descent(X, y, theta, alpha, num_iters):
     m = len(y)
@@ -41,7 +41,7 @@ def gradient_descent(X, y, theta, alpha, num_iters):
         costs.append(cost(X, y, theta))
     return theta, costs
 ```
-#### feature normalization
+### Feature normalization
 ```
 def feature_normaliza(X):
     mu = np.mean(X, 0)      
@@ -53,7 +53,7 @@ def feature_normaliza(X):
     return np.apply_along_axis(get_norm, 0, X), mu, sigma
 ```
 
-#### main function
+### Main function
 
 ```
 def linear_regression(X, y, alpha = 0.01,num_iters = 100):
@@ -63,8 +63,7 @@ def linear_regression(X, y, alpha = 0.01,num_iters = 100):
     predicted = np.dot(X, theta)
     return predicted, theta, costs
 ```
-
-#### plot an example
+### Plot an example
 ```
 predicted, theta, costs = linear_regression(X, y)
 
@@ -77,24 +76,29 @@ plt.xlabel('X')
 plt.legend(('linear fit', 'data'))
 plt.show()
 ```
+![error in linear regression](/linear_regression/images/Error.png)
 
-### 2. Logistic regression
-#### sigmoid function
+
+
+## 2. Logistic regression (with regularization)
+### Sigmoid function
 ```
 def sigmoid(z):
     return 1/(1 + np.exp(-z))
 ```
 
-#### cost function
+### Cost function
 
 ```
-def cost(theta, X, y):
+def cost_reg(theta, X, y, lam = 0):
     h = sigmoid(np.dot(X, theta))
-    cos = -(np.sum(y * np.log(h)) + np.sum((1 - y) * np.log(1 - h)))/len(y)
+    theta1 = theta.copy()
+    theta1[0] = 0
+    cos = -(np.sum(y * np.log(h)) + np.sum((1 - y) * np.log(1 - h)))/len(y) + lam * np.sum(theta1 * theta1)/len(y)
     return cos
 ```
 
-#### expand features
+### Expand features
 ```
 def expand_feature(x1, x2, power = 2):
     #expand a 2D feature matrix to polynimial features up to the power
@@ -105,31 +109,40 @@ def expand_feature(x1, x2, power = 2):
     return new_x
 ```
 
-#### gradient descent
+### Gradient descent
 ```
-def gradient_descent(X, y, theta, alpha, num_iters):
+def gradient_descent_reg(X, y, theta, alpha, lam = 0, num_iters = 100):
     m = len(y)
     costs = []
+
     for _ in range(num_iters):
         h = sigmoid(np.dot(X, theta))
-        theta -= alpha * (np.sum((h - y) * X, axis = 0)).reshape(theta.shape[0], 1)/m
-        costs.append(cost(theta, X, y))
+        theta1 = theta.copy()
+        theta1[0] = 0
+        theta -= alpha * ((np.sum((h - y) * X, axis = 0)).reshape(theta.shape[0], 1) + 2 * lam * theta1)/m
+        costs.append(cost_reg(theta, X, y))
     return theta, costs
 ```
 
-#### main function
+### Prediction
 ```
 def predict(theta, X):
     return (sigmoid(np.dot(X, theta)) > 0.5).flatten()
-
-def logistic_regression(X, y, power = 2, alpha = 0.01, num_iters = 100):
+```
+### Main function
+```
+def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 100):
     X = expand_feature(X[:, 0], X[:, 1], power = power)
     theta = np.zeros((X.shape[1], 1), dtype = np.float64)
-    theta, costs = gradient_descent(X, y, theta, alpha, num_iters)
+    theta, costs = gradient_descent_reg(X, y, theta, alpha, lam, num_iters)
     predicted = predict(theta, X)
     return predicted, theta, costs
 ```
-
-
-
+### Examples
+#### Overfitting
+![decision_boundary_overfitting](/logistic_regression/images/decision_boundary_overfitting.png)
+#### Underfitting
+![decision_boundary_underfitting](/logistic_regression/images/decision_boundary_underfitting.png)
+#### Proper regularization
+![decision_boundary_regularization](/logistic_regression/images/decision_boundary_regularization.png)
 ...
