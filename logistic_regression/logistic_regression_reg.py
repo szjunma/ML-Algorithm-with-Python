@@ -12,20 +12,19 @@ def cost_reg(theta, X, y, lam = 0):
     return cos
 
 def gradient_descent_reg(X, y, theta, alpha, lam = 0, num_iters = 100):
-    m = len(y)
     costs = []
 
     for _ in range(num_iters):
         h = sigmoid(np.dot(X, theta))
         theta1 = theta.copy()
         theta1[0] = 0
-        theta -= alpha * (np.dot(X.T, (h - y)) + 2 * lam * theta1)/m
+        theta -= alpha * (np.dot(X.T, (h - y)) + 2 * lam * theta1)/len(y)
         costs.append(cost_reg(theta, X, y))
     return theta, costs
 
 def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 100):
     X = expand_feature(X[:, 0], X[:, 1], power = power)
-    theta = np.zeros((X.shape[1], 1), dtype = np.float64)
+    theta = np.zeros((X.shape[1], y.shape[1]), dtype = np.float64)
     theta, costs = gradient_descent_reg(X, y, theta, alpha, lam, num_iters)
     predicted = predict(theta, X)
     return predicted, theta, costs
@@ -39,7 +38,7 @@ if __name__ == '__main__':
     X, y = data[:, :-1], data[:, -1].reshape((-1, 1))
 
     # overfitting without regularization
-    power, num_iters = 10, 10000
+    power, num_iters = 10, 100000
     predicted, theta, costs = logistic_regression_reg(X, y, power = power, alpha = 0.6, lam = 0, num_iters = num_iters)
     print('The accuracy is {:.2f} %'.format(sum(predicted == y.flatten())/len(y)*100))
 
