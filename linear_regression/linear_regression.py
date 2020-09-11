@@ -5,15 +5,15 @@ import os, sys
 
 def cost(X, y, theta):
     h = np.dot(X, theta)
-    cos = np.sum((h - y) * ( h - y))/(2 * len(y))
-    return cos
+    cos = np.dot((h - y).T, ( h - y))/(2 * len(y))
+    return cos[0][0]
 
 def gradient_descent(X, y, theta, alpha, num_iters):
     m = len(y)
     costs = []
     for _ in range(num_iters):
-        h = np.dot(X,theta)
-        theta -= alpha * (np.sum((h - y) * X, axis = 0)).reshape(X.shape[1], 1)/m
+        h = np.dot(X, theta)
+        theta -= alpha * np.dot(X.T, (h - y))/m
         costs.append(cost(X, y, theta))
     return theta, costs
 
