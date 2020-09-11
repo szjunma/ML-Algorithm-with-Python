@@ -19,7 +19,7 @@ def gradient_descent_reg(X, y, theta, alpha, lam = 0, num_iters = 100):
         h = sigmoid(np.dot(X, theta))
         theta1 = theta.copy()
         theta1[0] = 0
-        theta -= alpha * ((np.sum((h - y) * X, axis = 0)).reshape(theta.shape[0], 1) + 2 * lam * theta1)/m
+        theta -= alpha * (np.dot(X.T, (h - y)) + 2 * lam * theta1)/m
         costs.append(cost_reg(theta, X, y))
     return theta, costs
 
@@ -31,7 +31,7 @@ def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 
     return predicted, theta, costs
 
 if __name__ == '__main__':
-    images_dir = os.path.join(sys.path[0], 'images')
+    images_dir = os.path.join(sys.path[0], 'image')
     if not os.path.exists(images_dir):
         os.makedirs(images_dir)
 

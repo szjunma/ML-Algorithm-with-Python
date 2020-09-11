@@ -5,8 +5,8 @@ import os, sys
 
 def cost(X, y, theta):
     h = np.dot(X, theta)
-    cos = np.dot((h - y).T, ( h - y))/(2 * len(y))
-    return cos[0][0]
+    cos = np.sum((h - y) * ( h - y))/(2 * len(y))
+    return cos
 
 def gradient_descent(X, y, theta, alpha, num_iters):
     m = len(y)

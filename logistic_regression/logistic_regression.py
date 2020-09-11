@@ -24,7 +24,7 @@ def gradient_descent(X, y, theta, alpha, num_iters):
     costs = []
     for _ in range(num_iters):
         h = sigmoid(np.dot(X, theta))
-        theta -= alpha * (np.sum((h - y) * X, axis = 0)).reshape(theta.shape[0], 1)/m
+        theta -= alpha * np.dot(X.T, (h - y))/m
         costs.append(cost(theta, X, y))
     return theta, costs
 
