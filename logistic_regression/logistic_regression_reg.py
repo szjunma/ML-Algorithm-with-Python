@@ -31,7 +31,7 @@ def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 
     return predicted, theta, costs
 
 if __name__ == '__main__':
-    images_dir = os.path.join(sys.path[0], 'image')
+    images_dir = os.path.join(sys.path[0], 'images')
     if not os.path.exists(images_dir):
         os.makedirs(images_dir)
 
