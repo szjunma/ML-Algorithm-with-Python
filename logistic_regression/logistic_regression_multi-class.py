@@ -36,7 +36,7 @@ if __name__ == '__main__':
         y_[i * N:(i + 1) * N] = i
         y[i * N:(i + 1) * N, i] = 1
 
-    sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y_, palette = sns.color_palette('deep', K))
+    sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y_, palette = sns.color_palette('deep', K), edgecolor = "none")
     plt.title('Dataset')
     plt.xlabel('X')
     plt.ylabel('Y')
@@ -50,16 +50,13 @@ if __name__ == '__main__':
     u = np.linspace(min(X[:, 0]),max(X[:, 0]), 50)
     v = np.linspace(min(X[:, 1]),max(X[:, 1]), 50)
 
-    for k in range(0, 3, 2):
-        z = np.zeros((len(u),len(v)))
-        for i in range(len(u)):
-                for j in range(len(v)):
-                    z[i,j] = np.dot(expand_feature(u[i].reshape(1,-1),v[j].reshape(1,-1)),theta[:, k])
+    gridx, gridy = np.meshgrid(u, v)
+    grid = np.array([gridx.reshape(-1, ), gridy.reshape(-1, )]).T
 
-        z = np.transpose(z)
-        plt.contour(u,v,z,[0,0.01], cmap = "Blues")
+    z = predict_multi_class(theta, expand_feature(gridx.reshape(-1, 1), gridy.reshape(-1, 1))).reshape(50, 50)
+    plt.contourf(u, v, z, alpha = 0.3, antialiased = True)
 
-    sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y_, palette = sns.color_palette('deep', K))
+    sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y_, palette = sns.color_palette('deep', K), edgecolor = "none")
     plt.title('Decision Boundary')
     plt.xlabel('X')
     plt.ylabel('Y')
