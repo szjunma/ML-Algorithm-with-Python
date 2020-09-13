@@ -140,8 +140,8 @@ def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 
 ```
 ### Examples
 <p float="left">
-  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="100" />
-  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="100" />
-  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="100" />
+  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="200" />
+  <img src="/logistic_regression/images/decision_boundary_underfitting.png" width="200" />
+  <img src="/logistic_regression/images/decision_boundary_regularization.png" width="200" />
 </p>
 ...

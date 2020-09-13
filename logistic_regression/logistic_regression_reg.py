@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     plt.contour(u,v,z,[0,0.01], cmap = "Reds")
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y.flatten())
-    plt.title('Decision Boundary')
+    plt.title('Overfitting')
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.savefig(os.path.join(images_dir, 'decision_boundary_overfitting.png'))
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     plt.contour(u,v,z,[0,0.01], cmap = "Reds")
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y.flatten())
-    plt.title('Decision Boundary')
+    plt.title('Underfitting')
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.savefig(os.path.join(images_dir, 'decision_boundary_underfitting.png'))
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 
     plt.contour(u,v,z,[0,0.01], cmap = "Reds")
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y.flatten())
-    plt.title('Decision Boundary')
+    plt.title('Adequate Regularization')
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.savefig(os.path.join(images_dir, 'decision_boundary_regularization.png'))
