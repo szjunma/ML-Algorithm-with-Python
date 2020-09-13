@@ -43,17 +43,18 @@ if __name__ == '__main__':
     plt.savefig(os.path.join(images_dir, 'data_multi-class.png'))
     plt.clf()
 
-    num_iters = 1000
+    num_iters = 2000
     predicted, theta, costs = logistic_regression_reg_multi_class(X, y, alpha = 0.3, lam = 0, num_iters = num_iters)
     print('The accuracy is {:.2f} %'.format(sum(predicted == y_)/len(y_)*100))
 
-    u = np.linspace(min(X[:, 0]),max(X[:, 0]), 50)
-    v = np.linspace(min(X[:, 1]),max(X[:, 1]), 50)
+    gridsize = 200
+    u = np.linspace(min(X[:, 0]),max(X[:, 0]), gridsize)
+    v = np.linspace(min(X[:, 1]),max(X[:, 1]), gridsize)
 
     gridx, gridy = np.meshgrid(u, v)
     grid = np.array([gridx.reshape(-1, ), gridy.reshape(-1, )]).T
 
-    z = predict_multi_class(theta, expand_feature(gridx.reshape(-1, 1), gridy.reshape(-1, 1))).reshape(50, 50)
+    z = predict_multi_class(theta, expand_feature(gridx.reshape(-1, 1), gridy.reshape(-1, 1))).reshape(gridsize, gridsize)
     plt.contourf(u, v, z, alpha = 0.3, antialiased = True)
 
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y_, palette = sns.color_palette('deep', K), edgecolor = "none")
