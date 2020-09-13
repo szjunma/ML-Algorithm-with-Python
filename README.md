@@ -1,6 +1,6 @@
 # ML Algorithm with Python
 
-## Being constantly updated ...
+## Being constantly updated ..
 
 Machine learning algorithm written in Python
 - Requires basic linear algebra
