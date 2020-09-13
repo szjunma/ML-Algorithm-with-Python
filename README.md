@@ -139,10 +139,9 @@ def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 
     return predicted, theta, costs
 ```
 ### Examples
-#### Overfitting
-![decision_boundary_overfitting](/logistic_regression/images/decision_boundary_overfitting.png)
-#### Underfitting
-![decision_boundary_underfitting](/logistic_regression/images/decision_boundary_underfitting.png)
-#### Proper regularization
-![decision_boundary_regularization](/logistic_regression/images/decision_boundary_regularization.png)
+<p float="left">
+  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="100" />
+  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="100" />
+  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="100" />
+</p>
 ...
