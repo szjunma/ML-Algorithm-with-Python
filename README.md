@@ -1,9 +1,14 @@
 # ML Algorithm with Python
 
+## Table of Contents
+  1. [Linear Regression](#linear_regression)
+  2. [Logistic Regression](#logistic_regression)
+  3. [Neural Network](#neural_network)
+
 ## Being constantly updated ..
 
 Machine learning algorithm written in Python
-- Requires basic linear algebra
+- Requires only basic linear algebra
 - Uses Numpy for matrix operation to avoid costly looping in Python
 - Usually includes notebook for easy visual
 - Simple examples provided
@@ -19,7 +24,7 @@ python ***.py
 ## credit
 Most equations are from [CS 229](http://cs229.stanford.edu/syllabus-autumn2018.html) class of Stanford.  
 
-## 1. Linear regression
+## 1. Linear Regression <a name="linear_regression"></a>
 
 ### Cost function
 
@@ -81,7 +86,7 @@ plt.show()
 </p>
 
 
-## 2. Logistic regression (with regularization)
+## 2. Logistic Regression (with Regularization) <a name="logistic_regression"></a>
 ### Sigmoid function
 ```
 def sigmoid(z):
@@ -144,5 +149,82 @@ def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 
   <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="250" />
   <img src="/logistic_regression/images/decision_boundary_underfitting.png" width="250" />
   <img src="/logistic_regression/images/decision_boundary_regularization.png" width="250" />
+</p>
+
+## 3. Neural Network <a name="neural_network"></a>
+### Initialize parameters
+```
+def init_para(D, K, h):
+    W = np.random.normal(0, 0.01, (D, h))
+    b = np.zeros((1, h), dtype = float)
+    W2 = np.random.normal(0, 0.01, (h, K))
+    b2 = np.zeros((1, K), dtype = float)
+    return W, b, W2, b2
+```
+### Softmax
+```
+def softmax(scores):
+    exp_scores = np.exp(scores)
+    return exp_scores / np.sum(exp_scores, axis = 1).reshape(-1, 1)
+```
+
+### Main function
+```
+def nnet(X, y, step_size = 0.4, lam = 0.0001, h = 10, num_iters = 1000):
+    # get dim of input
+    N, D = X.shape
+    K = y.shape[1]
+
+    W, b, W2, b2 = init_para(D, K, h)
+
+    # gradient descent loop to update weight and bias
+    for i in range(num_iters):
+        # hidden layer, ReLU activation
+        hidden_layer = np.maximum(0, np.dot(X, W) + np.repeat(b, N, axis = 0))
+
+        # class score
+        scores = np.dot(hidden_layer, W2) + np.repeat(b2, N, axis = 0)
+
+        # compute and normalize class probabilities
+        probs = softmax(scores)
+
+        # compute the loss with regularization
+        data_loss = np.sum(-np.log(probs) * y) / N
+        reg_loss = 0.5 * lam * np.sum(W * W) + 0.5 * lam * np.sum(W2 * W2)
+        loss = data_loss + reg_loss
+
+        # check progress
+        if i%1000 == 0 or i == num_iters:
+            print("iteration {}: loss {}".format(i, loss))
+
+        # compute the gradient on scores
+        dscores = (probs - y) / N
+
+        # backpropate the gradient to the parameters
+        dW2 = np.dot(hidden_layer.T, dscores)
+        db2 = np.sum(dscores, axis = 0)
+        # next backprop into hidden layer
+        dhidden = np.dot(dscores, W2.T)
+        # backprop the ReLU non-linearity
+        dhidden[hidden_layer <= 0] = 0
+        # finally into W,b
+        dW = np.dot(X.T, dhidden)
+        db = np.sum(dhidden, axis = 0)
+
+        # add regularization gradient contribution
+        dW2 = dW2 + lam * W2
+        dW = dW + lam * W
+
+        # update parameter
+        W = W - step_size * dW
+        b = b - step_size * db
+        W2 = W2 - step_size * dW2
+        b2 = b2 - step_size * db2
+    return W, b, W2, b2
+```
+
+### Example
+<p float="left">
+  <img src="/neural_network/images/decision_boundary_nnet.png" width="500" />
 </p>
 ...
