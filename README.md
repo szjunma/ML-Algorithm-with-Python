@@ -76,8 +76,9 @@ plt.xlabel('X')
 plt.legend(('linear fit', 'data'))
 plt.show()
 ```
-![error in linear regression](/linear_regression/images/Error.png)
-
+<p float="left">
+  <img src="/linear_regression/images/Error.png" width="500" />
+</p>
 
 
 ## 2. Logistic regression (with regularization)
@@ -140,8 +141,8 @@ def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 
 ```
 ### Examples
 <p float="left">
-  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="200" />
-  <img src="/logistic_regression/images/decision_boundary_underfitting.png" width="200" />
-  <img src="/logistic_regression/images/decision_boundary_regularization.png" width="200" />
+  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="250" />
+  <img src="/logistic_regression/images/decision_boundary_underfitting.png" width="250" />
+  <img src="/logistic_regression/images/decision_boundary_regularization.png" width="250" />
 </p>
 ...
