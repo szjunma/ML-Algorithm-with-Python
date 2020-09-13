@@ -87,7 +87,7 @@ plt.show()
 </p>
 
 <a name="logistic_regression"></a>
-## 2. [Logistic Regression (with Regularization)](/logistic_regression/logistic_regression_reg.ipynb)
+## 2. [Logistic Regression (with Regularization)](/logistic_regression/logistic_regression.ipynb)
 ### Sigmoid function
 ```
 def sigmoid(z):
