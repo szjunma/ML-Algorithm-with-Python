@@ -24,7 +24,8 @@ python ***.py
 ## credit
 Most equations are from [CS 229](http://cs229.stanford.edu/syllabus-autumn2018.html) class of Stanford.  
 
-## 1. Linear Regression <a name="linear_regression"></a>
+<a name="linear_regression"></a>
+## 1. Linear Regression
 
 ### Cost function
 
@@ -85,8 +86,8 @@ plt.show()
   <img src="/linear_regression/images/Error.png" width="500" />
 </p>
 
-
-## 2. Logistic Regression (with Regularization) <a name="logistic_regression"></a>
+<a name="logistic_regression"></a>
+## 2. Logistic Regression (with Regularization)
 ### Sigmoid function
 ```
 def sigmoid(z):
@@ -151,7 +152,8 @@ def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 
   <img src="/logistic_regression/images/decision_boundary_regularization.png" width="250" />
 </p>
 
-## 3. Neural Network <a name="neural_network"></a>
+<a name="neural_network"></a>
+## 3. Neural Network
 ### Initialize parameters
 ```
 def init_para(D, K, h):
