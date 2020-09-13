@@ -3,16 +3,25 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os, sys
 
-def nnet(X, y, step_size = 0.4, lam = 0.0001, h = 10, num_iters = 1000):
-    # get dim of input
-    N, D = X.shape
-    K = y.shape[1]
-
+def init_para(D, K, h):
     # initialize parameters randomly
     W = np.random.normal(0, 0.01, (D, h))
     b = np.zeros((1, h), dtype = float)
     W2 = np.random.normal(0, 0.01, (h, K))
     b2 = np.zeros((1, K), dtype = float)
+    return W, b, W2, b2
+
+def softmax(scores):
+    exp_scores = np.exp(scores)
+    return exp_scores / np.sum(exp_scores, axis = 1).reshape(-1, 1)
+
+def nnet(X, y, step_size = 0.4, lam = 0.0001, h = 10, num_iters = 1000):
+    # get dim of input
+    N, D = X.shape
+    K = y.shape[1]
+
+    W, b, W2, b2 = init_para(D, K, h)
+
     # gradient descent loop to update weight and bias
     for i in range(num_iters):
         # hidden layer, ReLU activation
@@ -22,14 +31,13 @@ def nnet(X, y, step_size = 0.4, lam = 0.0001, h = 10, num_iters = 1000):
         scores = np.dot(hidden_layer, W2) + np.repeat(b2, N, axis = 0)
 
         # compute and normalize class probabilities
-        exp_scores = np.exp(scores)
-        probs = exp_scores / np.sum(exp_scores, axis = 1).reshape(-1, 1)
+        probs = softmax(scores)
 
-        # compute the loss: sofmax and regularization
-        corect_logprobs = -np.log(probs)
-        data_loss = np.sum(corect_logprobs * y) / N
+        # compute the loss with regularization
+        data_loss = np.sum(-np.log(probs) * y) / N
         reg_loss = 0.5 * lam * np.sum(W * W) + 0.5 * lam * np.sum(W2 * W2)
         loss = data_loss + reg_loss
+
         # check progress
         if i%1000 == 0 or i == num_iters:
             print("iteration {}: loss {}".format(i, loss))
@@ -66,15 +74,6 @@ def predict(X, para):
     scores = np.dot(hidden_layer, W2) + np.repeat(b2, N, axis = 0)
     return np.argmax(scores, axis = 1)
 
-def prob(X, para, k):
-    W, b, W2, b2 = para
-    N = X.shape[0]
-    hidden_layer = np.maximum(0, np.dot(X, W) + np.repeat(b, N, axis = 0))
-    scores = np.dot(hidden_layer, W2) + np.repeat(b2, N, axis = 0)
-    exp_scores = np.exp(scores)
-    probs = exp_scores / np.sum(exp_scores, axis = 1).reshape(-1, 1)
-    return probs.flatten()[k]
-
 if __name__ == '__main__':
     images_dir = os.path.join(sys.path[0], 'images')
     if not os.path.exists(images_dir):
@@ -97,22 +96,19 @@ if __name__ == '__main__':
         y[i * N:(i + 1) * N, i] = 1
 
     num_iters = 10000
-    para = nnet(X, y, step_size = 0.4, lam = 0.0001, h = 25, num_iters = num_iters)
+    para = nnet(X, y, step_size = 0.3, lam = 0.0005, h = 50, num_iters = num_iters)
     predicted = predict(X, para)
     print('The accuracy is {:.2f} %'.format(sum(predicted == y_)/len(y_)*100))
 
-    u = np.linspace(min(X[:, 0]),max(X[:, 0]), 50)
-    v = np.linspace(min(X[:, 1]),max(X[:, 1]), 50)
+    grid_size = 100
+    u = np.linspace(min(X[:, 0]),max(X[:, 0]), grid_size)
+    v = np.linspace(min(X[:, 1]),max(X[:, 1]), grid_size)
 
-    for k in range(0, K, 2):
-        z = np.zeros((len(u),len(v)))
-        for i in range(len(u)):
-                for j in range(len(v)):
-                    z[i,j] = prob(np.array([u[i], v[j]]).reshape(1, -1), para, k)
+    gridx, gridy = np.meshgrid(u, v)
+    grid = np.array([gridx.reshape(-1, ), gridy.reshape(-1, )]).T
+    z = predict(grid, para).reshape(grid_size, grid_size)
 
-        z = np.transpose(z)
-        plt.contour(u,v,z,[0,0.5], colors = ['darkblue', 'green'][k//2])
-
+    plt.contourf(u,v,z, alpha = 0.2, antialiased = True)
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y_, palette = sns.color_palette('deep', K), edgecolor = "none")
     plt.title('Decision Boundary')
     plt.xlabel('X')
