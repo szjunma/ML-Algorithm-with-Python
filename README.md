@@ -3,7 +3,7 @@
   1. [Linear Regression](#linear_regression)
   2. [Logistic Regression](#logistic_regression)
   3. [Neural Network](#neural_network)
-  4. [K-Means](#k_means)
+  4. [K-Means](#k-means)
 
 ## Being constantly updated ..
 
@@ -279,7 +279,7 @@ def k_means(X, K, num_iters = 100):
   <img src="/k-means/images/k-means.png" width="500" />
 </p>
 
-### Determin K
+### Determine K
 <p float="left">
   <img src="/k-means/images/total_dist_vs_k.png" width="500" />
 </p>
