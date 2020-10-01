@@ -1,9 +1,9 @@
 # ML Algorithm with Python
-
 ## Table of Contents
   1. [Linear Regression](#linear_regression)
   2. [Logistic Regression](#logistic_regression)
   3. [Neural Network](#neural_network)
+  4. [K-Means](#k_means)
 
 ## Being constantly updated ..
 
@@ -229,4 +229,59 @@ def nnet(X, y, step_size = 0.4, lam = 0.0001, h = 10, num_iters = 1000):
 <p float="left">
   <img src="/neural_network/images/decision_boundary_nnet.png" width="500" />
 </p>
+
+## 4. [K-Means](/k-means/k-means.ipynb)
+### Initialize centroids
+```
+def init_centroid(X, K):
+    m = X.shape[0]
+    idx = np.random.choice(m, K, replace = False)
+    return X[idx, :]
+```
+### Update labels
+```
+def update_label(X, centroid):
+    m, K = X.shape[0], centroid.shape[0]
+    dist = np.zeros((m, K))
+    label = np.zeros((m, 1))
+
+    for i in range(m):
+        for j in range(K):
+            dist[i,j] = np.dot((X[i, :] - centroid[j, :]).T, (X[i, :] - centroid[j, :]))
+
+    label = np.argmin(dist, axis = 1)
+    total_dist = np.sum(np.choose(label, dist.T))
+    return label, total_dist
+```
+### Update centroids
+```
+def update_centroid(X, label, K):
+    D = X.shape[1]
+    centroid = np.zeros((K, D))
+    for i in range(K):
+        centroid[i, :] = np.mean(X[label.flatten() == i, :], axis=0).reshape(1,-1)
+    return centroid
+```
+### K-Means function
+```
+def k_means(X, K, num_iters = 100):
+    m = X.shape[0]
+    centroid = init_centroid(X, K)
+
+    for _ in range(num_iters):
+        label, total_dist = update_label(X, centroid)
+        centroid = update_centroid(X, label, K)
+
+    return centroid, label, total_dist
+```
+### Example
+<p float="left">
+  <img src="/k-means/images/k-means.png" width="500" />
+</p>
+
+### Determin K
+<p float="left">
+  <img src="/k-means/images/total_dist_vs_k.png" width="500" />
+</p>
+
 ...
