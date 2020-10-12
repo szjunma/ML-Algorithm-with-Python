@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os, sys
 
+def init_centroid(X, K):
+    m = X.shape[0]
+    idx = np.random.choice(m, K, replace = False)
+    return X[idx, :]
+
 def update_label(X, centroid):
     m, K = X.shape[0], centroid.shape[0]
     dist = np.zeros((m, K))
@@ -16,19 +21,12 @@ def update_label(X, centroid):
     total_dist = np.sum(np.choose(label, dist.T))
     return label, total_dist
 
-
 def update_centroid(X, label, K):
     D = X.shape[1]
     centroid = np.zeros((K, D))
     for i in range(K):
         centroid[i, :] = np.mean(X[label.flatten() == i, :], axis=0).reshape(1,-1)
     return centroid
-
-
-def init_centroid(X, K):
-    m = X.shape[0]
-    idx = np.random.choice(m, K, replace = False)
-    return X[idx, :]
 
 def k_means(X, K, num_iters = 100):
     m = X.shape[0]
@@ -55,7 +53,14 @@ if __name__ == '__main__':
         t = np.random.normal(0, 0.4, (N, 1)) # theta
         X[i * N:(i + 1) * N] = np.append(r * np.sin(t) + i/2, r * np.cos(t) - 2*i/2, axis = 1)
 
-    centroid, label, _ = k_means(X, K, num_iters = 100)
+    # sns.scatterplot(x = X[:, 0], y = X[:, 1], edgecolor = "none")
+    # plt.title('Dataset')
+    # plt.ylabel('Y')
+    # plt.xlabel('X')
+    # plt.savefig(os.path.join(images_dir, 'dataset.png'))
+    # plt.clf()
+
+    centroid, label, _ = k_means(X, K, num_iters = 50)
 
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = label, palette = sns.color_palette('deep', K), edgecolor = "none")
     sns.scatterplot(x = centroid[:, 0], y = centroid[:, 1], marker = "x", facecolor='red', s = 10**2, linewidth = 5)
