@@ -4,6 +4,7 @@
   2. [Logistic Regression](#logistic_regression)
   3. [Neural Network](#neural_network)
   4. [K-Means](#k-means)
+  5. [PCA](#PCA)
 
 ## Being constantly updated ..
 
@@ -284,4 +285,6 @@ def k_means(X, K, num_iters = 100):
   <img src="/k-means/images/total_dist_vs_k.png" width="500" />
 </p>
 
+
+## 5. [PCA](/PCA/PCA.ipynb)
 ...
