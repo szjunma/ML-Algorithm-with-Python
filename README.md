@@ -4,7 +4,7 @@
   2. [Logistic Regression](#logistic_regression)
   3. [Neural Network](#neural_network)
   4. [K-Means](#k-means)
-  5. [PCA](#PCA)
+  5. [Principal Component Analysis](#principal_component_analysis)
 
 ## Being constantly updated ..
 
@@ -286,5 +286,47 @@ def k_means(X, K, num_iters = 100):
 </p>
 
 
-## 5. [PCA](/PCA/PCA.ipynb)
+## 5. [Principal Component Analysis](/PCA/PCA.ipynb)
+
+### SVD (Singular Value Decomposition)
+```
+Sig = np.dot(X_norm.T,X_norm)/X_norm.shape[0]
+U,S,V = np.linalg.svd(Sig)
+```
+
+### Data projection
+```
+def project_data(X_norm, U, K):
+    Z = np.zeros((X_norm.shape[0], K))
+    U_reduce = U[:, 0:K]
+    Z = np.dot(X_norm, U_reduce)
+    return Z
+```
+
+### Data recovery
+```
+def recover_data(Z, U, K):
+    X_rec = np.zeros((Z.shape[0], U.shape[0]))
+    U_recude = U[:, 0:K]
+    X_rec = np.dot(Z, U_recude.T)
+    return X_rec
+```
+
+### PCA function
+```
+def PCA(X, K):
+    X_norm, mu, sigma = feature_normaliza(X)
+
+    Sig = np.dot(X_norm.T,X_norm)/X_norm.shape[0]
+    U,S,V = np.linalg.svd(Sig)
+
+    Z = project_data(X_norm, U, K)
+    X_rec = recover_data(Z, U, K)
+    return X_rec
+```
+### Example (2D -> 1D)
+<p float="left">
+  <img src="/PCA/images/PCA.png" width="500" />
+</p>
+
 ...
