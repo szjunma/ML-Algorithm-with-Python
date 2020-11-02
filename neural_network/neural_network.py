@@ -100,7 +100,7 @@ if __name__ == '__main__':
     predicted = predict(X, para)
     print('The accuracy is {:.2f} %'.format(sum(predicted == y_)/len(y_)*100))
 
-    grid_size = 100
+    grid_size = 200
     u = np.linspace(min(X[:, 0]),max(X[:, 0]), grid_size)
     v = np.linspace(min(X[:, 1]),max(X[:, 1]), grid_size)
 
@@ -108,7 +108,7 @@ if __name__ == '__main__':
     grid = np.array([gridx.reshape(-1, ), gridy.reshape(-1, )]).T
     z = predict(grid, para).reshape(grid_size, grid_size)
 
-    plt.contourf(u,v,z, alpha = 0.2, antialiased = True)
+    plt.contourf(u,v,z, alpha = 0.2, levels = K - 1, antialiased = True)
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y_, palette = sns.color_palette('deep', K), edgecolor = "none")
     plt.title('Decision Boundary')
     plt.xlabel('X')

@@ -55,7 +55,7 @@ if __name__ == '__main__':
     grid = np.array([gridx.reshape(-1, ), gridy.reshape(-1, )]).T
 
     z = predict_multi_class(theta, expand_feature(gridx.reshape(-1, 1), gridy.reshape(-1, 1))).reshape(gridsize, gridsize)
-    plt.contourf(u, v, z, alpha = 0.3, antialiased = True)
+    plt.contourf(u, v, z, alpha = 0.2, levels = K - 1, antialiased = True)
 
     sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y_, palette = sns.color_palette('deep', K), edgecolor = "none")
     plt.title('Decision Boundary')
