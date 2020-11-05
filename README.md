@@ -3,8 +3,9 @@
   1. [Linear Regression](#linear_regression)
   2. [Logistic Regression](#logistic_regression)
   3. [Neural Network](#neural_network)
-  4. [K-Means](#k-means)
-  5. [Principal Component Analysis](#principal_component_analysis)
+  4. [Decision Tree](#decision_tree)
+  5. [K-Means](#k-means)
+  6. [Principal Component Analysis](#principal_component_analysis)
 
 ## Being constantly updated ..
 
@@ -148,9 +149,9 @@ def logistic_regression_reg(X, y, power = 2, alpha = 0.01, lam = 0, num_iters = 
 ```
 ### Examples
 <p float="left">
-  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="250" />
-  <img src="/logistic_regression/images/decision_boundary_underfitting.png" width="250" />
-  <img src="/logistic_regression/images/decision_boundary_regularization.png" width="250" />
+  <img src="/logistic_regression/images/decision_boundary_overfitting.png" width="300" />
+  <img src="/logistic_regression/images/decision_boundary_underfitting.png" width="300" />
+  <img src="/logistic_regression/images/decision_boundary_regularization.png" width="300" />
 </p>
 
 <a name="neural_network"></a>
@@ -231,7 +232,115 @@ def nnet(X, y, step_size = 0.4, lam = 0.0001, h = 10, num_iters = 1000):
   <img src="/neural_network/images/decision_boundary_nnet.png" width="500" />
 </p>
 
-## 4. [K-Means](/k-means/k-means.ipynb)
+<a name="decision_tree"></a>
+## 4. [decision_tree](/decision_tree/decision_tree.ipynb)
+### Gini impurity
+```
+def gini_impurity(y):
+    # calculate gini_impurity given labels/classes of each example
+    m = y.shape[0]
+    cnts = dict(zip(*np.unique(y, return_counts = True)))
+    impurity = 1 - sum((cnt/m)**2 for cnt in cnts.values())
+    return impurity
+```
+
+### Information gain
+```
+def info_gain(l_y, r_y, cur_gini):
+    # calculate the information gain for a certain split
+    m, n = l_y.shape[0], r_y.shape[0]
+    p = m / (m + n)
+    return cur_gini - p * gini_impurity(l_y) - (1 - p) * gini_impurity(r_y)
+```
+
+### Find best split
+```
+def get_split(X, y):
+    # loop through features and values to find best combination with the most information gain
+    best_gain, best_index, best_value = 0, None, None
+
+    cur_gini = gini_impurity(y)
+    n_features = X.shape[1]  
+
+    for index in range(n_features):  
+
+        values = np.unique(X[:, index], return_counts = False)  
+
+        for value in values:  
+
+            left, right = test_split(index, value, X, y)
+
+            if left['y'].shape[0] == 0 or right['y'].shape[0] == 0:
+                continue
+
+            gain = info_gain(left['y'], right['y'], cur_gini)
+
+            if gain > best_gain:
+                best_gain, best_index, best_value = gain, index, value
+    best_split = {'gain': best_gain, 'index': best_index, 'value': best_value}
+    return best_split
+```
+### Creat leaf and decision node
+```
+class Leaf:
+    # define a leaf node
+    def __init__(self, y):
+        self.counts = dict(zip(*np.unique(y, return_counts = True)))
+        self.prediction = max(self.counts.keys(), key = lambda x: self.counts[x])
+
+class Decision_Node:
+    # define a decision node
+    def __init__(self, index, value, left, right):
+        self.index, self.value = index, value
+        self.left, self.right = left, right
+```
+### Training (build decision tree)
+```
+def decision_tree(X, y, max_dep = 5, min_size = 10):
+    # train the decision tree model with a dataset
+    correct_prediction = 0
+
+    def build_tree(X, y, dep, max_dep = max_dep, min_size = min_size):
+        # recursively build the tree
+        split = get_split(X, y)
+
+        if split['gain'] == 0 or dep >= max_dep or y.shape[0] <= min_size:
+            nonlocal correct_prediction
+            leaf = Leaf(y)
+            correct_prediction += leaf.counts[leaf.prediction]
+            return leaf
+
+        left, right = test_split(split['index'], split['value'], X, y)
+
+        left_node = build_tree(left['X'], left['y'], dep + 1)
+        right_node = build_tree(right['X'], right['y'], dep + 1)
+
+        return Decision_Node(split['index'], split['value'], left_node, right_node)
+
+    root = build_tree(X, y, 0)
+
+    return correct_prediction/y.shape[0], root
+```
+### Prediction
+```
+def predict(x, node):
+    if isinstance(node, Leaf):
+        return node.prediction
+
+    if x[node.index] < node.value:
+        return predict(x, node.left)
+    else:
+        return predict(x, node.right)
+```
+
+
+### Example
+<p float="left">
+  <img src="/decision_tree/images/decision_boundary.png" width="1000" />
+</p>
+
+<a name="k-means"></a>
+## 5. [K-Means](/k-means/k-means.ipynb)
 ### Initialize centroids
 ```
 def init_centroid(X, K):
@@ -285,8 +394,8 @@ def k_means(X, K, num_iters = 100):
   <img src="/k-means/images/total_dist_vs_k.png" width="500" />
 </p>
 
-
-## 5. [Principal Component Analysis](/PCA/PCA.ipynb)
+<a name="principal_component_analysis"></a>
+## 6. [Principal Component Analysis](/PCA/PCA.ipynb)
 
 ### SVD (Singular Value Decomposition)
 ```
