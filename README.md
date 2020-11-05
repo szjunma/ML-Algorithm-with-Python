@@ -1,4 +1,9 @@
 # ML Algorithm with Python
+
+<p float="none">
+  <img src="/title.png" width="1000" />
+</p>
+
 ## Table of Contents
   1. [Linear Regression](#linear_regression)
   2. [Logistic Regression](#logistic_regression)
