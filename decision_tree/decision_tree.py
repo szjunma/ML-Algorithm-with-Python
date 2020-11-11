@@ -1,4 +1,5 @@
 import numpy as np
+from math import log
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os, sys
@@ -9,6 +10,13 @@ def gini_impurity(y):
     cnts = dict(zip(*np.unique(y, return_counts = True)))
     impurity = 1 - sum((cnt/m)**2 for cnt in cnts.values())
     return impurity
+
+def entropy(y):
+    # calculate entropy given labels/classes of each example
+    m = y.shape[0]
+    cnts = dict(zip(*np.unique(y, return_counts = True)))
+    disorder = - sum((cnt/m)*log(cnt/m) for cnt in cnts.values())
+    return disorder
 
 def test_split(index, value, X, y):
     # split a group of examples based on given index (feature) and value
@@ -21,12 +29,14 @@ def info_gain(l_y, r_y, cur_gini):
     # calculate the information gain for a certain split
     m, n = l_y.shape[0], r_y.shape[0]
     p = m / (m + n)
+    #return cur_gini - p * entropy(l_y) - (1 - p) * entropy(r_y)
     return cur_gini - p * gini_impurity(l_y) - (1 - p) * gini_impurity(r_y)
 
 def get_split(X, y):
     # loop through features and values to find best combination with the most information gain
     best_gain, best_index, best_value = 0, None, None
 
+    #cur_gini = entropy(y)
     cur_gini = gini_impurity(y)
     n_features = X.shape[1]
 
@@ -111,8 +121,8 @@ if __name__ == '__main__':
     plt.title('Dataset')
     plt.xlabel('X')
     plt.ylabel('Y')
-    plt.savefig(os.path.join(images_dir, 'data.png'))
-    plt.clf()
+    # plt.savefig(os.path.join(images_dir, 'data.png'))
+    # plt.clf()
 
     overfit_accuracy, overfit_model = decision_tree(X, y, float('inf'), 1)
     accuracy, model = decision_tree(X, y, 6)
@@ -140,5 +150,5 @@ if __name__ == '__main__':
         ax.set_title(titles[k])
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
-    plt.savefig(os.path.join(images_dir, 'decision_boundary.png'))
-    plt.clf()
+    # plt.savefig(os.path.join(images_dir, 'decision_boundary.png'))
+    # plt.clf()
