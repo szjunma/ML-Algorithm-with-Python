@@ -121,8 +121,8 @@ if __name__ == '__main__':
     plt.title('Dataset')
     plt.xlabel('X')
     plt.ylabel('Y')
-    # plt.savefig(os.path.join(images_dir, 'data.png'))
-    # plt.clf()
+    plt.savefig(os.path.join(images_dir, 'data.png'))
+    plt.clf()
 
     overfit_accuracy, overfit_model = decision_tree(X, y, float('inf'), 1)
     accuracy, model = decision_tree(X, y, 6)
@@ -150,5 +150,5 @@ if __name__ == '__main__':
         ax.set_title(titles[k])
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
-    # plt.savefig(os.path.join(images_dir, 'decision_boundary.png'))
-    # plt.clf()
+    plt.savefig(os.path.join(images_dir, 'decision_boundary.png'))
+    plt.clf()
