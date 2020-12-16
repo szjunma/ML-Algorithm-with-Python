@@ -238,8 +238,8 @@ def nnet(X, y, step_size = 0.4, lam = 0.0001, h = 10, num_iters = 1000):
 </p>
 
 <a name="decision_tree"></a>
-## 4. [decision_tree](/decision_tree/decision_tree.ipynb)
-### Gini impurity
+## 4. [Decision Tree](/decision_tree/decision_tree.ipynb)
+### Gini impurity/Entropy
 ```
 def gini_impurity(y):
     # calculate gini_impurity given labels/classes of each example
@@ -247,6 +247,13 @@ def gini_impurity(y):
     cnts = dict(zip(*np.unique(y, return_counts = True)))
     impurity = 1 - sum((cnt/m)**2 for cnt in cnts.values())
     return impurity
+
+def entropy(y):
+    # calculate entropy given labels/classes of each example
+    m = y.shape[0]
+    cnts = dict(zip(*np.unique(y, return_counts = True)))
+    disorder = - sum((cnt/m)*log(cnt/m) for cnt in cnts.values())
+    return disorder
 ```
 
 ### Information gain
@@ -285,7 +292,7 @@ def get_split(X, y):
     best_split = {'gain': best_gain, 'index': best_index, 'value': best_value}
     return best_split
 ```
-### Creat leaf and decision node
+### Create leaf and decision node
 ```
 class Leaf:
     # define a leaf node
